@@ -3,11 +3,11 @@
 #-------------------------------------------------
 # Author:               Luca Fabian Burger
 # Organisation          IMS
-# Version:              1.5
+# Version:              1.4
 # Task:                 Beverage Vending Machine
 # OS:                   Linux (arch) native
 # Date:                 14.5.24
-# Last added feature:   Daily_sailes fixes
+# Last added feature:   Fixed balance updating
 # Start                 ./getraenke-automat.sh
 # start from root       ./startGetraenke.sh    
 #-------------------------------------------------
@@ -297,4 +297,152 @@ add_to_apple_fans() {
 display_order_message() {
     if [ "$selected_milk" != "no-milk" ] || [ "$selected_sugar" != "no-sweetener" ]; then
         echo "Preparing a $beverage (with $selected_milk and $selected_sugar) for $original_price CHF."
-    elif [ "$selected_s
+    elif [ "$selected_sugar" == "" ]; then
+         echo "Preparing a $beverage (with $selected_milk) for $original_price CHF."
+    elif  [ "$selected_milk" == "" ]; then
+               echo "Preparing a $beverage (with $selected_sugar) for $original_price CHF."
+    else
+        echo "Preparing $beverage for $original_price CHF."
+    fi
+}
+
+# Function to simulate a loading bar
+simulate_loading_bar() {
+    # Loading bar stolen from the internet --> don't understand seq yet
+    echo "Preparing..."
+    for ((i=0; i<=100; i+=5)); do
+        echo -ne "$i% ["
+        printf "%0.s=" $(seq 1 $((i/2)))
+        printf "%0.s " $(seq $(((100-i)/2)))
+        echo -ne "]\r"
+        sleep 0.1
+    done
+    # This is now again written by me without the help of the internet
+    echo -e "\nFinished!"
+    sleep 1
+    echo "Please take your item from the dispenser"
+    sleep 10
+    echo ""
+    clear
+}
+
+clear
+start_machine
+if [ $input -eq 1 ]; then
+    running=1
+fi
+while [ $running -eq 1 ]; do
+    get_beverage
+
+    case $input in
+        -1)
+            echo "System is shutting down, please wait..."
+            simulate_loading_bar
+            echo "Do you want to display the daily sales? (y/n)"
+            read display_choice
+            if [ "$display_choice" == "y" ]; then
+                echo "Daily Sales:"
+                for sale in "${daily_sales[@]}"; do
+                    echo "$sale"
+                done
+            fi
+            echo "System shutdown complete."
+            exit 0
+            ;;
+        1)
+            select_cafe
+            get_modifications
+            daily_sales+=("$beverage: $original_price CHF")
+            ;;
+        2)
+            select_tea
+            get_modifications
+            daily_sales+=("$beverage: $original_price CHF")
+            ;;
+        3)
+            echo "You have chosen Sprite."
+            beverage="Sprite"
+            original_price=2
+            daily_sales+=("Sprite: $original_price CHF")
+            ;;
+        4)
+            echo "You have chosen Fanta."
+            beverage="Fanta"
+            original_price=2
+            daily_sales+=("Fanta: $original_price CHF")
+            ;;
+        5)
+            get_mineral_water
+            if [ "$input" == 1 ]; then
+                echo "You have chosen Mineral Water with gas."
+                beverage="Mineral Water with gas"
+                original_price=2
+                daily_sales+=("Mineral Water with gas: $original_price CHF")
+            elif [ "$input" == 2 ]; then
+                echo "You have chosen Mineral Water without gas."
+                beverage="Mineral Water without gas"
+                original_price=1
+                daily_sales+=("Mineral Water without gas: $original_price CHF")
+            else
+                echo "Invalid input"
+                continue
+            fi
+            ;;
+        6)
+            get_cola
+            case $input in
+                1)
+                    echo "You have chosen Normal Cola"
+                    beverage="Normal Cola"
+                    original_price=2
+                    daily_sales+=("Normal Cola: $original_price CHF")
+                    ;;
+                2)
+                    echo "You have chosen Light Cola"
+                    beverage="Light Cola"
+                    original_price=1
+                    daily_sales+=("Light Cola: $original_price CHF")
+                    ;;
+                3)
+                    echo "You have chosen Zero Cola"
+                    beverage="Zero Cola"
+                    original_price=1
+                    daily_sales+=("Zero Cola: $original_price CHF")
+                    ;;
+                *)
+                    echo "Invalid input"
+                    continue
+                    ;;
+            esac
+            ;;
+        7)
+            select_cigarettes
+            daily_sales+=("$beverage: $original_price CHF")
+            ;;
+        *)
+            echo "Invalid selection."
+            continue
+            ;;
+    esac
+
+    balance=$original_price
+
+    if handle_payment; then
+        echo "Are you an apple fan?"
+        get_y_n
+        if [ "$input" == "y" ]; then
+            add_to_apple_fans
+        else
+            echo "Good."
+        fi
+
+        # Display order message
+        display_order_message
+
+        # Simulate loading bar
+        simulate_loading_bar
+    else
+        echo "Transaction cancelled. Your balance was not updated."
+    fi
+
+done
