@@ -3,11 +3,11 @@
 #-------------------------------------------------
 # Author:               Luca Fabian Burger
 # Organisation          IMS
-# Version:              1.4
+# Version:              1.6
 # Task:                 Beverage Vending Machine
 # OS:                   Linux (arch) native
-# Date:                 14.5.24
-# Last added feature:   Fixed balance updating
+# Date:                 21.5.24
+# Last added feature:   daily_sales upgrade
 # Start                 ./getraenke-automat.sh
 # start from root       ./startGetraenke.sh    
 #-------------------------------------------------
