@@ -279,9 +279,8 @@ handle_payment() {
 
 # Function to add apple fans to the list
 add_to_apple_fans() {
-    read -p "Whats your name? " input
-    if test -e theList
-    then
+    read -p "What's your name? " input
+    if test -e theList; then
         echo $input >> theList
     else
         touch theList
@@ -300,7 +299,7 @@ display_order_message() {
     elif [ "$selected_sugar" == "" ]; then
          echo "Preparing a $beverage (with $selected_milk) for $original_price CHF."
     elif  [ "$selected_milk" == "" ]; then
-               echo "Preparing a $beverage (with $selected_sugar) for $original_price CHF."
+        echo "Preparing a $beverage (with $selected_sugar) for $original_price CHF."
     else
         echo "Preparing $beverage for $original_price CHF."
     fi
@@ -308,7 +307,7 @@ display_order_message() {
 
 # Function to simulate a loading bar
 simulate_loading_bar() {
-    # Loading bar stolen from the internet --> don't understand seq yet
+    #Loading bar stolen from the internet --> don't understand seq yet
     echo "Preparing..."
     for ((i=0; i<=100; i+=5)); do
         echo -ne "$i% ["
@@ -317,7 +316,7 @@ simulate_loading_bar() {
         echo -ne "]\r"
         sleep 0.1
     done
-    # This is now again written by me without the help of the internet
+    # This is now again written by be without the help of the internet
     echo -e "\nFinished!"
     sleep 1
     echo "Please take your item from the dispenser"
@@ -336,17 +335,16 @@ while [ $running -eq 1 ]; do
 
     case $input in
         -1)
+            echo "Displaying daily sales..."
+            sleep 2
+            echo "Daily Sales:"
+            sleep 1
+            for sale in "${daily_sales[@]}"; do
+                echo "$sale"
+                sleep 0.1
+            done
             echo "System is shutting down, please wait..."
             simulate_loading_bar
-            echo "Do you want to display the daily sales? (y/n)"
-            read display_choice
-            if [ "$display_choice" == "y" ]; then
-                echo "Daily Sales:"
-                for sale in "${daily_sales[@]}"; do
-                    echo "$sale"
-                done
-            fi
-            echo "System shutdown complete."
             exit 0
             ;;
         1)
@@ -444,5 +442,4 @@ while [ $running -eq 1 ]; do
     else
         echo "Transaction cancelled. Your balance was not updated."
     fi
-
 done
