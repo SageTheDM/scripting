@@ -3,11 +3,11 @@
 #-------------------------------------------------
 # Author:               Luca Fabian Burger
 # Organisation          IMS
-# Version:              1.6
+# Version:              1.7
 # Task:                 Beverage Vending Machine
 # OS:                   Linux (arch) native
 # Date:                 21.5.24
-# Last added feature:   daily_sales upgrade
+# Last added feature:   Improved Input handles
 # Start                 ./getraenke-automat.sh
 # start from root       ./startGetraenke.sh    
 #-------------------------------------------------
@@ -20,13 +20,25 @@ beverage=""
 original_price=0
 daily_sales=()  # Array to store daily sales
 
+# Function to ensure non-empty input
+read_non_empty() {
+    local prompt="$1"
+    while true; do
+        read -p "$prompt" input
+        if [ -n "$input" ]; then
+            break
+        else
+            echo "Input cannot be empty. Please enter a valid option."
+        fi
+    done
+}
+
 # Function to start the machine
 start_machine(){
     clear
     is_machine_active=0
     while [ $is_machine_active -ne 1 ]; do
-        echo "Press 1 to start the machine"
-        read input
+        read_non_empty "Press 1 to start the machine: "
         sleep 4
         clear
         sleep 2
@@ -46,7 +58,7 @@ get_beverage() {
     echo "5) Mineral Water"
     echo "6) Cola"
     echo "7) Cigarettes"
-    read -p "What would you like? (-1 to Cancel): " input
+    read_non_empty "What would you like? (-1 to Cancel): "
 }
 
 # Function to get cafe input
@@ -55,7 +67,7 @@ get_cafe() {
     echo "1) Espresso"
     echo "2) Latte Machiato"
     echo "3) Coffee"
-    read -p "What kind of cafe would you like? " input
+    read_non_empty "What kind of cafe would you like? "
 }
 
 # Function to get tea input
@@ -65,7 +77,7 @@ get_tea() {
     echo "2) Grüntee"
     echo "3) Jasmintee"
     echo "4) Vanille Tee"
-    read -p "What kind of tea would you like? " input
+    read_non_empty "What kind of tea would you like? "
 }
 
 # Function to get cigarette input
@@ -76,7 +88,7 @@ get_cigarettes() {
     echo "3) Camel"
     echo "4) Winston"
     echo "5) Lucky Strike"
-    read -p "What brand of cigarettes would you like? " input
+    read_non_empty "What brand of cigarettes would you like? "
 }
 
 # Function to get mineral water input
@@ -84,7 +96,7 @@ get_mineral_water() {
     echo "Mineral Water Menu:"
     echo "1) With gas"
     echo "2) Without gas"
-    read -p "Do you want mineral water with or without gas? " input
+    read_non_empty "Do you want mineral water with or without gas? "
 }
 
 # Function to get cola input
@@ -93,12 +105,12 @@ get_cola() {
     echo "1) Normal"
     echo "2) Light"
     echo "3) Zero"
-    read -p "What kind of cola would you like? " input
+    read_non_empty "What kind of cola would you like? "
 }
 
 # Function to get yes or no input
 get_y_n(){
-    read -p "Yes or no? (y/n) " input
+    read_non_empty "Yes or no? (y/n): "
 }
 
 # Function to get milk selection
@@ -111,7 +123,7 @@ get_milk(){
         echo "3) almond-milk"
         echo "4) rice-milk"
         echo "5) no-milk"
-        read -p "What kind of milk would you like? " input
+        read_non_empty "What kind of milk would you like? "
         case $input in
             1) selected_milk="cow-milk" ;;
             2) selected_milk="oat-milk" ;;
@@ -134,7 +146,7 @@ get_sugar(){
         echo "2) brown sugar"
         echo "3) stevia"
         echo "4) no-sweetener"
-        read -p "What kind of sweetener would you like? " input
+        read_non_empty "What kind of sweetener would you like? "
         case $input in
             1) selected_sugar="sugar" ;;
             2) selected_sugar="brown sugar" ;;
@@ -247,7 +259,8 @@ select_cigarettes() {
 handle_payment() {
     total_payment=0
     while [ $total_payment -lt $balance ]; do
-        read -p "Initial price $balance CHF. Please insert coins or bills (Enter -1 to cancel): " payment
+        read_non_empty "Initial price $balance CHF. Please insert coins or bills (Enter -1 to cancel): "
+        payment=$input
         if [ $payment -eq -1 ]; then
             echo "Cancelling the transaction..."
             echo "Returning your payment..."
@@ -279,7 +292,7 @@ handle_payment() {
 
 # Function to add apple fans to the list
 add_to_apple_fans() {
-    read -p "What's your name? " input
+    read_non_empty "What's your name? "
     if test -e theList; then
         echo $input >> theList
     else
