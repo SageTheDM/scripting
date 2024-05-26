@@ -305,9 +305,8 @@ display_order_message() {
     fi
 }
 
-# Function to simulate a loading bar
+# Function to simulate a loading bar for preparation
 simulate_loading_bar() {
-    #Loading bar stolen from the internet --> don't understand seq yet
     echo "Preparing..."
     for ((i=0; i<=100; i+=5)); do
         echo -ne "$i% ["
@@ -316,12 +315,26 @@ simulate_loading_bar() {
         echo -ne "]\r"
         sleep 0.1
     done
-    # This is now again written by be without the help of the internet
     echo -e "\nFinished!"
     sleep 1
-    echo "Please take your item from the dispenser or bring the daily sailes to admin"
+    echo "Please take your item from the dispenser."
     sleep 10
     echo ""
+    clear
+}
+
+# Function to simulate a loading bar for shutdown
+simulate_shutdown_loading_bar() {
+    echo "System is shutting down, please wait..."
+    for ((i=0; i<=100; i+=5)); do
+        echo -ne "$i% ["
+        printf "%0.s=" $(seq 1 $((i/2)))
+        printf "%0.s " $(seq $(((100-i)/2)))
+        echo -ne "]\r"
+        sleep 0.1
+    done
+    echo -e "\nShutdown complete."
+    sleep 1
     clear
 }
 
@@ -343,15 +356,13 @@ while [ $running -eq 1 ]; do
                 echo "$sale"
                 sleep 0.1
             done
-            echo "System is shutting down, please wait..."
-            simulate_loading_bar
-            sleep 10
+            simulate_shutdown_loading_bar
             start_machine
             ;;
         1)
             select_cafe
             get_modifications
-            daily_sales+=("$beverage: $original_price CHF")s
+            daily_sales+=("$beverage: $original_price CHF")
             ;;
         2)
             select_tea
