@@ -334,7 +334,9 @@ simulate_shutdown_loading_bar() {
         sleep 0.1
     done
     echo -e "\nShutdown complete."
-    sleep 1
+    sleep 10
+    echo "Start new cycle"
+    sleep 5
     clear
 }
 
@@ -354,7 +356,7 @@ while [ $running -eq 1 ]; do
             sleep 1
             for sale in "${daily_sales[@]}"; do
                 echo "$sale"
-                sleep 0.1
+                sleep 0.2
             done
             simulate_shutdown_loading_bar
             start_machine
