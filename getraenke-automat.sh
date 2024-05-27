@@ -3,11 +3,11 @@
 #-------------------------------------------------
 # Author:               Luca Fabian Burger
 # Organisation          IMS
-# Version:              1.6
+# Version:              1.7
 # Task:                 Beverage Vending Machine
 # OS:                   Linux (arch) native
-# Date:                 21.5.24
-# Last added feature:   daily_sales upgrade
+# Date:                 27.5.24
+# Last added feature:   Input error handle
 # Start                 ./getraenke-automat.sh
 # start from root       ./startGetraenke.sh    
 #-------------------------------------------------
@@ -46,7 +46,14 @@ get_beverage() {
     echo "5) Mineral Water"
     echo "6) Cola"
     echo "7) Cigarettes"
-    read -p "What would you like? (-1 to Cancel): " input
+    while : ; do
+        read -p "What would you like? (-1 to Cancel): " input
+        if [[ "$input" =~ ^-?[0-9]+$ ]] && [ "$input" -ge -1 ] && [ "$input" -le 7 ]; then
+            break
+        else
+            echo "Invalid input. Please enter a number between -1 and 7."
+        fi
+    done
 }
 
 # Function to get cafe input
@@ -55,7 +62,14 @@ get_cafe() {
     echo "1) Espresso"
     echo "2) Latte Machiato"
     echo "3) Coffee"
-    read -p "What kind of cafe would you like? " input
+    while : ; do
+        read -p "What kind of cafe would you like? " input
+        if [[ "$input" =~ ^[1-3]$ ]]; then
+            break
+        else
+            echo "Invalid input. Please enter a number between 1 and 3."
+        fi
+    done
 }
 
 # Function to get tea input
@@ -65,7 +79,14 @@ get_tea() {
     echo "2) Grüntee"
     echo "3) Jasmintee"
     echo "4) Vanille Tee"
-    read -p "What kind of tea would you like? " input
+    while : ; do
+        read -p "What kind of tea would you like? " input
+        if [[ "$input" =~ ^[1-4]$ ]]; then
+            break
+        else
+            echo "Invalid input. Please enter a number between 1 and 4."
+        fi
+    done
 }
 
 # Function to get cigarette input
@@ -76,7 +97,14 @@ get_cigarettes() {
     echo "3) Camel"
     echo "4) Winston"
     echo "5) Lucky Strike"
-    read -p "What brand of cigarettes would you like? " input
+    while : ; do
+        read -p "What brand of cigarettes would you like? " input
+        if [[ "$input" =~ ^[1-5]$ ]]; then
+            break
+        else
+            echo "Invalid input. Please enter a number between 1 and 5."
+        fi
+    done
 }
 
 # Function to get mineral water input
@@ -84,7 +112,14 @@ get_mineral_water() {
     echo "Mineral Water Menu:"
     echo "1) With gas"
     echo "2) Without gas"
-    read -p "Do you want mineral water with or without gas? " input
+    while : ; do
+        read -p "Do you want mineral water with or without gas? " input
+        if [[ "$input" =~ ^[1-2]$ ]]; then
+            break
+        else
+            echo "Invalid input. Please enter a number between 1 and 2."
+        fi
+    done
 }
 
 # Function to get cola input
@@ -93,12 +128,27 @@ get_cola() {
     echo "1) Normal"
     echo "2) Light"
     echo "3) Zero"
-    read -p "What kind of cola would you like? " input
+    while : ; do
+        read -p "What kind of cola would you like? " input
+        if [[ "$input" =~ ^[1-3]$ ]]; then
+            break
+        else
+            echo "Invalid input. Please enter a number between 1 and 3."
+        fi
+    done
 }
 
 # Function to get yes or no input
 get_y_n(){
-    read -p "Yes or no? (y/n) " input
+    while : ; do
+        read -p "Yes or no? (y/n) " input
+        if [[ "$input" =~ ^[yYnN]$ ]]; then
+            input=${input,,}
+            break
+        else
+            echo "Invalid input. Please enter y or n."
+        fi
+    done
 }
 
 # Function to get milk selection
@@ -111,15 +161,17 @@ get_milk(){
         echo "3) almond-milk"
         echo "4) rice-milk"
         echo "5) no-milk"
-        read -p "What kind of milk would you like? " input
-        case $input in
-            1) selected_milk="cow-milk" ;;
-            2) selected_milk="oat-milk" ;;
-            3) selected_milk="almond-milk" ;;
-            4) selected_milk="rice-milk" ;;
-            5) selected_milk="no-milk" ;;
-            *) echo "Invalid input";;
-        esac
+        while : ; do
+            read -p "What kind of milk would you like? " input
+            case $input in
+                1) selected_milk="cow-milk"; break ;;
+                2) selected_milk="oat-milk"; break ;;
+                3) selected_milk="almond-milk"; break ;;
+                4) selected_milk="rice-milk"; break ;;
+                5) selected_milk="no-milk"; break ;;
+                *) echo "Invalid input. Please enter a number between 1 and 5." ;;
+            esac
+        done
     else
         echo "No milk selected"
     fi
@@ -134,14 +186,16 @@ get_sugar(){
         echo "2) brown sugar"
         echo "3) stevia"
         echo "4) no-sweetener"
-        read -p "What kind of sweetener would you like? " input
-        case $input in
-            1) selected_sugar="sugar" ;;
-            2) selected_sugar="brown sugar" ;;
-            3) selected_sugar="stevia" ;;
-            4) selected_sugar="no-sweetener" ;;
-            *) echo "Invalid input";;
-        esac
+        while : ; do
+            read -p "What kind of sweetener would you like? " input
+            case $input in
+                1) selected_sugar="sugar"; break ;;
+                2) selected_sugar="brown sugar"; break ;;
+                3) selected_sugar="stevia"; break ;;
+                4) selected_sugar="no-sweetener"; break ;;
+                *) echo "Invalid input. Please enter a number between 1 and 4." ;;
+            esac
+        done
     else
         echo "No sweetener selected"
     fi
@@ -174,6 +228,7 @@ select_cafe() {
             ;;
         *)
             echo "Invalid input"
+            select_cafe
             ;;
     esac
 }
@@ -204,6 +259,7 @@ select_tea() {
             ;;
         *)
             echo "Invalid input"
+            select_tea
             ;;
     esac
 }
@@ -239,6 +295,7 @@ select_cigarettes() {
             ;;
         *)
             echo "Invalid input"
+            select_cigarettes
             ;;
     esac
 }
