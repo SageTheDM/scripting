@@ -1,5 +1,0 @@
-1. error ---> If the input is above the integar value the system wants horendoues amount of cash
-
-2. spamming enter may break the system
-
-3. Patrick is now my prime-tester
