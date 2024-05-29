@@ -341,6 +341,9 @@ add_to_apple_fans() {
         echo $input >> theList
     else
         touch theList
+        echo "The follwing list contains potential serial killers, terrorist and worst of all open source hating apple fans" >> theList
+        echo "Please avoid all the following indiduals at all cost" >> theList
+        echo "If your name is on the list.... zhink about what you have done" >> theList
         echo $input >> theList
     fi
 
