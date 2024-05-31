@@ -3,11 +3,11 @@
 #-------------------------------------------------
 # Author:               Luca Fabian Burger
 # Organisation          IMS
-# Version:              1.9
+# Version:              2.0
 # Task:                 Beverage Vending Machine
 # OS:                   Linux (arch) native
 # Date:                 29.5.24
-# Last added feature:   Comments were changed
+# Last added feature:   Prepared for turn in
 # Start                 ./getraenke-automat.sh
 # start from root       ./startGetraenke.sh    
 #-------------------------------------------------
