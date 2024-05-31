@@ -3,11 +3,11 @@
 #-------------------------------------------------
 # Author:               Luca Fabian Burger
 # Organisation          IMS
-# Version:              1.8
+# Version:              1.9
 # Task:                 Beverage Vending Machine
 # OS:                   Linux (arch) native
-# Date:                 27.5.24
-# Last added feature:   Improved the structure of the files
+# Date:                 29.5.24
+# Last added feature:   Comments were changed
 # Start                 ./getraenke-automat.sh
 # start from root       ./startGetraenke.sh    
 #-------------------------------------------------
@@ -370,9 +370,12 @@ simulate_loading_bar() {
     echo "Preparing..."
     for ((i=0; i<=100; i+=5)); do
         echo -ne "$i% ["
+         # The simulation bar was created by chat.gpt i do not understand seq yet
+        # I decided to keep it because i like it
         printf "%0.s=" $(seq 1 $((i/2)))
         printf "%0.s " $(seq $(((100-i)/2)))
         echo -ne "]\r"
+        # My code followes here again
         sleep 0.1
     done
     echo -e "\nFinished!"
@@ -388,9 +391,12 @@ simulate_shutdown_loading_bar() {
     echo "System is shutting down, please wait..."
     for ((i=0; i<=100; i+=5)); do
         echo -ne "$i% ["
+        # The simulation bar was created by chat.gpt i do not understand seq yet
+        # I decided to keep it because i like it
         printf "%0.s=" $(seq 1 $((i/2)))
         printf "%0.s " $(seq $(((100-i)/2)))
         echo -ne "]\r"
+        # My code followes here again
         sleep 0.1
     done
     echo -e "\nShutdown complete."
